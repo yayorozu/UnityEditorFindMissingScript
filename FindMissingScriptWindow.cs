@@ -53,7 +53,13 @@ namespace UniLib
 				foreach (var script in _missingScripts)
 				{
 					foreach (var missionObject in script.MissionObjects)
+					{
+#if UNITY_2019_2_OR_NEWER
 						GameObjectUtility.RemoveMonoBehavioursWithMissingScript(missionObject.TargetObject);
+#else
+						GameObject.DestroyImmediate(missionObject.TargetObject);
+#endif
+					}
 
 					EditorUtility.SetDirty(script.GameObject);
 				}
@@ -111,6 +117,7 @@ namespace UniLib
 			_missingScripts.Clear();
 			var guids = AssetDatabase.FindAssets("t:prefab");
 
+			
 			for (var index = 0; index < guids.Length; index++)
 			{
 				if (index % 10 == 0)
@@ -126,22 +133,30 @@ namespace UniLib
 				var path = AssetDatabase.GUIDToAssetPath(guid);
 				var obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 				foreach (var cobj in obj.GetComponentsInChildren<Transform>())
-				foreach (var c in cobj.GetComponents<Component>())
 				{
-					if (c != null)
-						continue;
+#if UNITY_2019_2_OR_NEWER
+					if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(cobj.gameObject) > 0)
+					{
+#else
+					foreach (var c in cobj.GetComponents<Component>())
+					{
+						if (c != null)
+							continue;
+#endif
+						if (script == null)
+							script = new MissingScript(obj);
 
-					if (script == null)
-						script = new MissingScript(obj);
-
-					script.Add(cobj.gameObject);
+						script.Add(cobj.gameObject);
+					}
+					if (script != null)
+						_missingScripts.Add(script);
 				}
-
-				if (script != null)
-					_missingScripts.Add(script);
 			}
 
 			EditorUtility.ClearProgressBar();
+
+			if (_missingScripts.Count <= 0)
+				EditorUtility.DisplayDialog("Search Result", "Not Found Missing Script", "ok");
 		}
 	}
 }
