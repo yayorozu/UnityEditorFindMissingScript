@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace UniLib
+namespace Yorozu
 {
 	public class FindMissingScriptWindow : EditorWindow
 	{
@@ -38,7 +38,7 @@ namespace UniLib
 					{
 						using (new EditorGUI.DisabledScope(true))
 						{
-							EditorGUILayout.ObjectField(script.GameObject, typeof(GameObject));
+							EditorGUILayout.ObjectField(script.GameObject, typeof(GameObject), true);
 						}
 
 						foreach (var missionObject in script.MissionObjects)
