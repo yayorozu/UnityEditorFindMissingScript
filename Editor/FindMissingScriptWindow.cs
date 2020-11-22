@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Yorozu
+namespace Yorozu.EditorTools
 {
 	public class FindMissingScriptWindow : EditorWindow
 	{
@@ -117,7 +117,7 @@ namespace Yorozu
 			_missingScripts.Clear();
 			var guids = AssetDatabase.FindAssets("t:prefab");
 
-			
+
 			for (var index = 0; index < guids.Length; index++)
 			{
 				if (index % 10 == 0)
