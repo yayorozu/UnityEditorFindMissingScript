@@ -1,5 +1,5 @@
 {
-  "name": "FindMissingScript",
+  "name": "yorozu.tool.find-missing-script",
   "version": "0.0.1",
   "displayName": "FindMissingScript",
   "description": "Find Missing Script Tool",
