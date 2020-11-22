@@ -1,5 +1,5 @@
 {
-    "name": "FindMissingScript",
+    "name": "Yorozu.FindMissingScript.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"
