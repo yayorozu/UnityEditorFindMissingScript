@@ -117,7 +117,6 @@ namespace Yorozu.EditorTool
 			_missingScripts.Clear();
 			var guids = AssetDatabase.FindAssets("t:prefab");
 
-
 			for (var index = 0; index < guids.Length; index++)
 			{
 				if (index % 10 == 0)
@@ -132,10 +131,10 @@ namespace Yorozu.EditorTool
 				MissingScript script = null;
 				var path = AssetDatabase.GUIDToAssetPath(guid);
 				var obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-				foreach (var cobj in obj.GetComponentsInChildren<Transform>())
+				foreach (var transform in obj.GetComponentsInChildren<Transform>())
 				{
 #if UNITY_2019_2_OR_NEWER
-					if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(cobj.gameObject) > 0)
+					if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(transform.gameObject) > 0)
 					{
 #else
 					foreach (var c in cobj.GetComponents<Component>())
@@ -146,11 +145,11 @@ namespace Yorozu.EditorTool
 						if (script == null)
 							script = new MissingScript(obj);
 
-						script.Add(cobj.gameObject);
+						script.Add(transform.gameObject);
 					}
-					if (script != null)
-						_missingScripts.Add(script);
 				}
+				if (script != null)
+					_missingScripts.Add(script);
 			}
 
 			EditorUtility.ClearProgressBar();
